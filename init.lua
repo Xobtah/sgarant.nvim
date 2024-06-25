@@ -404,6 +404,13 @@ require('lazy').setup({
 
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    opts = {
+      setup = {
+        rust_analyzer = function()
+          return true
+        end,
+      },
+    },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for neovim
       'williamboman/mason.nvim',
@@ -451,6 +458,8 @@ require('lazy').setup({
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
+          vim.lsp.inlay_hint.enable(true)
+
           -- NOTE: Remember that lua is a real programming language, and as such it is possible
           -- to define small helper and utility functions so you don't have to repeat yourself
           -- many times.
@@ -542,30 +551,30 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
-        rust_analyzer = {
-          on_attach = function(client, bufnr)
-            require('completion').on_attach(client)
-            vim.lsp.inlay_hint.enable(bufnr)
-          end,
-          settings = {
-            ['rust-analyzer'] = {
-              imports = {
-                granularity = {
-                  group = 'module',
-                },
-                prefix = 'self',
-              },
-              cargo = {
-                buildScripts = {
-                  enable = true,
-                },
-              },
-              procMacro = {
-                enable = true,
-              },
-            },
-          },
-        },
+        -- rust_analyzer = {
+        --   on_attach = function(client, bufnr)
+        --     -- require('completion').on_attach(client)
+        --     vim.lsp.inlay_hint.enable(true)
+        --   end,
+        --   settings = {
+        --     ['rust-analyzer'] = {
+        --       imports = {
+        --         granularity = {
+        --           group = 'module',
+        --         },
+        --         prefix = 'self',
+        --       },
+        --       cargo = {
+        --         buildScripts = {
+        --           enable = true,
+        --         },
+        --       },
+        --       procMacro = {
+        --         enable = true,
+        --       },
+        --     },
+        --   },
+        -- },
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -816,7 +825,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'rust', 'python' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
