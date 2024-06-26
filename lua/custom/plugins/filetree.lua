@@ -7,6 +7,14 @@ return {
     'MunifTanjim/nui.nvim',
   },
   config = function()
-    require('neo-tree').setup {}
+    local neotree = require 'neo-tree'
+    neotree.setup {
+      window = {
+        mappings = {
+          ['P'] = { 'toggle_preview', config = { use_float = false, use_image_nvim = true } },
+        },
+      },
+    }
+    vim.keymap.set('n', '<C-n>', ':Neotree<CR>', { desc = 'Open [N]eotree' })
   end,
 }
